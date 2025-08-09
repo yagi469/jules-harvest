@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.farm_app_backend.dto.UserDto;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.stream.Collectors;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,10 +39,20 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return ResponseEntity.ok(authentication.getPrincipal());
+
+        // UserDetails オブジェクトを取得
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        // UserDto に変換
+        List<String> roles = userDetails.getAuthorities().stream()
+                                        .map(grantedAuthority -> grantedAuthority.getAuthority())
+                                        .collect(Collectors.toList());
+        UserDto userDto = new UserDto(userDetails.getUsername(), roles);
+
+        return ResponseEntity.ok(userDto);
     }
 }
