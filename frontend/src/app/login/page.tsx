@@ -32,7 +32,8 @@ export default function Login() {
                  router.push('/');
                  router.refresh(); // Refresh to update server-side state like layout
             } else {
-                setError('Invalid username or password');
+                console.error('Login failed:', res); // Log the full response for debugging
+                window.location.href = '/login?error'; // Force a full page reload to the error page
             }
         } catch (err) {
             setError('An unexpected error occurred during login.');

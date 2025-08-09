@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import ClientAuthProvider from "@/context/ClientAuthProvider";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import Navbar from '@/components/Navbar';
+import ClientAuthProvider from '@/context/ClientAuthProvider';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Harvest Experience App",
-  description: "Find and book your next farm harvest experience.",
+  title: 'Harvest Experience App',
+  description: 'Find and book your next farm harvest experience.',
 };
 
 export default function RootLayout({
@@ -29,8 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        <main>{children}</main>
+        <ClientAuthProvider>
+          <Navbar />
+          <main>{children}</main>
+        </ClientAuthProvider>
       </body>
     </html>
   );
